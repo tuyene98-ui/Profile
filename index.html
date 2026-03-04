@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GreenBoyMC - Minecraft Developer</title>
+    <title>GreenBoyMC - Angel Developer</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -22,11 +22,9 @@
         :root {
             --green: #00ff88;
             --green-dark: #00cc6a;
-            --diamond: #00f3ff;
-            --purple: #b829dd;
+            --cyan: #00f3ff;
             --gold: #ffd700;
             --dark: #0a0f0a;
-            --glass: rgba(0, 255, 136, 0.03);
         }
 
         body {
@@ -37,260 +35,328 @@
             overflow-x: hidden;
         }
 
-        /* Gradient Background */
         .bg {
             position: fixed;
             inset: 0;
             z-index: -2;
             background: 
-                radial-gradient(ellipse at 20% 80%, rgba(0, 255, 136, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 70%),
-                linear-gradient(180deg, #0a0f0a 0%, #0a1a0f 50%, #0a0f0a 100%);
+                radial-gradient(ellipse at 20% 80%, rgba(0, 255, 136, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0, 243, 255, 0.2) 0%, transparent 50%),
+                linear-gradient(180deg, #0a0f0a 0%, #051a0f 50%, #0a0f0a 100%);
         }
 
-        /* Floating Orbs */
-        .orbs {
+        .particles {
             position: fixed;
             inset: 0;
             z-index: -1;
             pointer-events: none;
         }
 
-        .orb {
+        .particle {
             position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--green);
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: float 20s infinite ease-in-out;
+            box-shadow: 0 0 10px var(--green);
+            animation: float-up 20s infinite;
         }
 
-        .orb-1 { width: 400px; height: 400px; background: var(--green); top: -10%; left: -10%; animation-delay: 0s; }
-        .orb-2 { width: 300px; height: 300px; background: var(--diamond); bottom: -5%; right: -5%; animation-delay: -5s; }
-        .orb-3 { width: 200px; height: 200px; background: var(--green-dark); top: 40%; left: 60%; animation-delay: -10s; }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
         }
 
-        /* Container */
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 2rem 1rem;
         }
 
-        /* Card */
         .card {
-            background: var(--glass);
+            background: rgba(0, 255, 136, 0.03);
             backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 3rem 2rem;
-            margin-top: 1rem;
+            border-radius: 40px;
+            padding: 4rem 2rem;
+            margin-top: 2rem;
             position: relative;
-            overflow: hidden;
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 30px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,243,255,0.1));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-
-        /* Profile with Wings */
-        .profile-wrap {
+        .profile-section {
+            position: relative;
             text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
         }
 
+        /* WINGS CONTAINER - CĂN GIỮA */
         .wings-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Wings */
-        .wing {
             position: absolute;
             top: 50%;
-            width: 150px;
-            height: 200px;
-            transform: translateY(-50%);
-            opacity: 0.8;
-            animation: flap 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 20px var(--green));
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 400px;
+            pointer-events: none;
+            z-index: 1;
         }
 
+        /* LEFT WING - BÊN TRÁI */
         .wing-left {
-            left: -120px;
-            transform: translateY(-50%) scaleX(-1);
-            animation-delay: 0s;
-        }
-
-        .wing-right {
-            right: -120px;
+            position: absolute;
+            left: 0;
+            top: 50%;
             transform: translateY(-50%);
-            animation-delay: 0.1s;
+            width: 350px;
+            height: 380px;
+            transform-origin: right center;
+            animation: flap-left 1.5s ease-in-out infinite;
         }
 
-        @keyframes flap {
-            0%, 100% { transform: translateY(-50%) rotate(0deg) scaleX(var(--scale, 1)); }
-            25% { transform: translateY(-50%) rotate(-10deg) scaleX(var(--scale, 1)); }
-            50% { transform: translateY(-50%) rotate(5deg) scaleX(var(--scale, 1)); }
-            75% { transform: translateY(-50%) rotate(-5deg) scaleX(var(--scale, 1)); }
+        /* RIGHT WING - BÊN PHẢI */
+        .wing-right {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 350px;
+            height: 380px;
+            transform-origin: left center;
+            animation: flap-right 1.5s ease-in-out infinite;
         }
 
-        .wing-left { --scale: -1; }
-
-        .wing svg {
-            width: 100%;
-            height: 100%;
-            fill: url(#wingGradient);
+        /* FLAP ANIMATION */
+        @keyframes flap-left {
+            0%, 100% { transform: translateY(-50%) rotateZ(0deg) rotateY(0deg); }
+            25% { transform: translateY(-50%) rotateZ(-10deg) rotateY(40deg); }
+            50% { transform: translateY(-50%) rotateZ(0deg) rotateY(0deg); }
+            75% { transform: translateY(-50%) rotateZ(10deg) rotateY(-30deg); }
         }
 
-        /* Avatar */
-        .avatar {
+        @keyframes flap-right {
+            0%, 100% { transform: translateY(-50%) rotateZ(0deg) rotateY(0deg); }
+            25% { transform: translateY(-50%) rotateZ(10deg) rotateY(-40deg); }
+            50% { transform: translateY(-50%) rotateZ(0deg) rotateY(0deg); }
+            75% { transform: translateY(-50%) rotateZ(-10deg) rotateY(30deg); }
+        }
+
+        /* WING GLOW */
+        .wing-glow {
+            position: absolute;
+            inset: -20px;
+            background: radial-gradient(ellipse at center, rgba(0,255,136,0.4) 0%, transparent 70%);
+            filter: blur(30px);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        /* FEATHERS */
+        .feather {
+            position: absolute;
+            border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+            transform-origin: bottom center;
+            box-shadow: 0 0 20px var(--green), inset 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        .feather-main {
+            width: 70px;
+            height: 180px;
+            background: linear-gradient(180deg, var(--green) 0%, var(--green-dark) 60%, transparent 100%);
+        }
+
+        .feather-secondary {
+            width: 50px;
+            height: 140px;
+            background: linear-gradient(180deg, var(--cyan) 0%, var(--green) 50%, transparent 100%);
+        }
+
+        .feather-tip {
+            width: 35px;
+            height: 100px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, var(--cyan) 30%, var(--green) 100%);
+        }
+
+        /* LEFT WING FEATHERS - xoay về bên trái */
+        .wing-left .feather-1 { bottom: 10%; left: 55%; transform: rotate(-15deg); }
+        .wing-left .feather-2 { bottom: 15%; left: 40%; transform: rotate(-30deg); }
+        .wing-left .feather-3 { bottom: 20%; left: 25%; transform: rotate(-45deg); }
+        .wing-left .feather-4 { bottom: 25%; left: 10%; transform: rotate(-60deg); }
+        .wing-left .feather-5 { bottom: 30%; left: 0%; transform: rotate(-75deg); }
+        
+        .wing-left .feather-6 { bottom: 25%; left: 65%; transform: rotate(-5deg); }
+        .wing-left .feather-7 { bottom: 30%; left: 50%; transform: rotate(-20deg); }
+        .wing-left .feather-8 { bottom: 35%; left: 35%; transform: rotate(-35deg); }
+
+        .wing-left .feather-9 { bottom: 40%; left: 70%; transform: rotate(10deg); }
+        .wing-left .feather-10 { bottom: 45%; left: 60%; transform: rotate(-5deg); }
+        .wing-left .feather-11 { bottom: 50%; left: 50%; transform: rotate(-20deg); }
+
+        /* RIGHT WING FEATHERS - xoay về bên phải */
+        .wing-right .feather-1 { bottom: 10%; right: 55%; transform: rotate(15deg); }
+        .wing-right .feather-2 { bottom: 15%; right: 40%; transform: rotate(30deg); }
+        .wing-right .feather-3 { bottom: 20%; right: 25%; transform: rotate(45deg); }
+        .wing-right .feather-4 { bottom: 25%; right: 10%; transform: rotate(60deg); }
+        .wing-right .feather-5 { bottom: 30%; right: 0%; transform: rotate(75deg); }
+        
+        .wing-right .feather-6 { bottom: 25%; right: 65%; transform: rotate(5deg); }
+        .wing-right .feather-7 { bottom: 30%; right: 50%; transform: rotate(20deg); }
+        .wing-right .feather-8 { bottom: 35%; right: 35%; transform: rotate(35deg); }
+
+        .wing-right .feather-9 { bottom: 40%; right: 70%; transform: rotate(-10deg); }
+        .wing-right .feather-10 { bottom: 45%; right: 60%; transform: rotate(5deg); }
+        .wing-right .feather-11 { bottom: 50%; right: 50%; transform: rotate(20deg); }
+
+        /* AVATAR */
+        .avatar-wrapper {
             position: relative;
             display: inline-block;
-            padding: 4px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--green), var(--diamond));
-            animation: rotate 6s linear infinite;
             z-index: 10;
         }
 
-        @keyframes rotate {
-            0% { filter: hue-rotate(0deg) drop-shadow(0 0 20px var(--green)); }
-            100% { filter: hue-rotate(360deg) drop-shadow(0 0 20px var(--green)); }
+        .avatar-glow {
+            position: absolute;
+            inset: -30px;
+            background: radial-gradient(circle, rgba(0,255,136,0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: avatar-pulse 2s infinite;
         }
 
-        .avatar-inner {
+        @keyframes avatar-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 0.9; }
+        }
+
+        .avatar {
+            position: relative;
             width: 180px;
             height: 180px;
             border-radius: 50%;
             overflow: hidden;
-            position: relative;
-            animation: rotate 6s linear infinite reverse;
-            background: linear-gradient(135deg, #0a2a1a, #0a3a2a);
+            border: 3px solid var(--green);
+            box-shadow: 0 0 40px var(--green), inset 0 0 20px rgba(0,255,136,0.3);
         }
 
         .avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
+        }
+
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a3a2a, #0a5a3a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
         }
 
         .crown {
             position: absolute;
-            top: -20px;
+            top: -40px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             z-index: 20;
-            filter: drop-shadow(0 0 20px var(--gold));
-            animation: bounce 2s infinite;
+            filter: drop-shadow(0 0 30px var(--gold));
+            animation: crown-bounce 2s ease-in-out infinite;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
+        @keyframes crown-bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0) rotate(-5deg); }
+            50% { transform: translateX(-50%) translateY(-15px) rotate(5deg); }
         }
 
-        /* Leaf particles */
-        .leaf {
-            position: absolute;
-            font-size: 1.5rem;
-            animation: fall 10s infinite linear;
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Upload */
+        /* UPLOAD */
         .upload {
             text-align: center;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 10;
         }
 
         .upload-btn {
             background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 243, 255, 0.2));
-            padding: 1rem 2rem;
+            padding: 1rem 2.5rem;
             border-radius: 50px;
             color: #fff;
             font-family: 'VT323', monospace;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            border: 1px solid rgba(0, 255, 136, 0.3);
         }
 
         .upload-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             background: linear-gradient(135deg, rgba(0, 255, 136, 0.4), rgba(0, 243, 255, 0.4));
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.4);
         }
 
-        /* Content */
+        /* CONTENT */
         .content {
             text-align: center;
+            position: relative;
+            z-index: 10;
         }
 
         .badge {
-            display: inline-block;
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 243, 255, 0.2));
-            padding: 0.4rem 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 0.6rem 2rem;
             border-radius: 50px;
             font-family: 'VT323', monospace;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--green);
             margin-bottom: 1rem;
-            letter-spacing: 2px;
-            animation: glow 2s infinite;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            animation: badge-glow 2s infinite;
         }
 
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.6); }
+        @keyframes badge-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
         }
 
         h1 {
             font-family: 'VT323', monospace;
-            font-size: 4rem;
-            background: linear-gradient(135deg, var(--green), var(--diamond));
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--green), var(--cyan), var(--green));
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: gradient-move 3s ease infinite;
             margin-bottom: 0.5rem;
-            text-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
-            letter-spacing: 3px;
+            letter-spacing: 5px;
+        }
+
+        @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .subtitle {
             font-family: 'VT323', monospace;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             color: rgba(255,255,255,0.6);
             margin-bottom: 2rem;
+            letter-spacing: 3px;
         }
 
-        /* Stats */
+        /* STATS */
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -303,35 +369,37 @@
             padding: 1.5rem 1rem;
             border-radius: 20px;
             transition: all 0.3s;
+            border: 1px solid rgba(0, 255, 136, 0.1);
         }
 
         .stat:hover {
             background: rgba(0, 255, 136, 0.1);
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
         }
 
         .stat-icon {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 0.5rem;
         }
 
         .stat-value {
             font-family: 'VT323', monospace;
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: var(--green);
             text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
         }
 
         .stat-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: rgba(255,255,255,0.4);
             margin-top: 0.3rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
-        /* Skills */
+        /* SKILLS */
         .skills {
             margin: 2rem 0;
         }
@@ -340,67 +408,74 @@
             font-family: 'VT323', monospace;
             font-size: 1.5rem;
             color: rgba(255,255,255,0.5);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 3px;
         }
 
         .skill-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.8rem;
+            gap: 1rem;
         }
 
         .skill {
             background: rgba(0, 255, 136, 0.08);
-            padding: 0.8rem 1.2rem;
-            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
             transition: all 0.3s;
             cursor: pointer;
+            border: 1px solid rgba(0, 255, 136, 0.1);
         }
 
         .skill:hover {
             background: rgba(0, 255, 136, 0.2);
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            transform: scale(1.05) translateY(-3px);
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
         }
 
-        /* XP Bar */
+        /* XP */
         .xp {
-            margin: 2rem 0;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 2rem auto;
+            max-width: 450px;
         }
 
         .xp-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             font-family: 'VT323', monospace;
-            font-size: 1rem;
-            color: rgba(255,255,255,0.5);
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.6);
         }
 
         .xp-bar {
-            height: 8px;
+            height: 10px;
             background: rgba(255,255,255,0.1);
-            border-radius: 4px;
+            border-radius: 5px;
             overflow: hidden;
         }
 
         .xp-fill {
             height: 100%;
             width: 87%;
-            background: linear-gradient(90deg, var(--green), var(--diamond));
-            border-radius: 4px;
+            background: linear-gradient(90deg, var(--green), var(--cyan), var(--green));
+            background-size: 200% 100%;
+            border-radius: 5px;
+            animation: shimmer 2s infinite, gradient-move 3s infinite linear;
             box-shadow: 0 0 20px var(--green);
-            animation: pulse 2s infinite;
         }
 
-        /* Social */
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* SOCIAL */
         .social {
             margin-top: 2rem;
         }
@@ -408,111 +483,137 @@
         .social-grid {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .social-btn {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             background: rgba(0, 255, 136, 0.1);
-            border-radius: 15px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             transition: all 0.3s;
             text-decoration: none;
-            color: #fff;
+            border: 1px solid rgba(0, 255, 136, 0.2);
         }
 
         .social-btn:hover {
             background: rgba(0, 255, 136, 0.3);
-            transform: translateY(-3px) rotate(5deg);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+            transform: translateY(-5px) scale(1.1);
+            border-color: var(--green);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
         }
 
-        /* Achievement */
+        /* ACHIEVEMENT */
         .achievement {
             position: fixed;
             bottom: -100px;
             right: 20px;
             background: rgba(10, 15, 10, 0.95);
-            padding: 1rem 1.5rem;
-            border-radius: 15px;
+            padding: 1.2rem 1.8rem;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             gap: 1rem;
             transition: all 0.5s;
             z-index: 1000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 255, 136, 0.3);
         }
 
         .achievement.show {
             bottom: 20px;
         }
 
-        /* Responsive */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
+            h1 { font-size: 3rem; }
             .stats { grid-template-columns: repeat(2, 1fr); }
-            .avatar-inner { width: 140px; height: 140px; }
+            .avatar { width: 140px; height: 140px; }
+            .wings-container { width: 100%; max-width: 500px; height: 280px; }
+            .wing-left, .wing-right { width: 250px; height: 280px; }
+            .feather-main { width: 50px; height: 130px; }
+            .feather-secondary { width: 35px; height: 100px; }
+            .feather-tip { width: 25px; height: 70px; }
             .card { padding: 2rem 1rem; }
-            .wing { width: 100px; height: 140px; }
-            .wing-left { left: -80px; }
-            .wing-right { right: -80px; }
+        }
+
+        /* FALLING FEATHERS */
+        .falling-feather {
+            position: fixed;
+            font-size: 1.5rem;
+            animation: feather-fall 8s infinite linear;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 5;
+            filter: drop-shadow(0 0 10px var(--green));
+        }
+
+        @keyframes feather-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <!-- SVG Gradient -->
-    <svg width="0" height="0">
-        <defs>
-            <linearGradient id="wingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
-                <stop offset="50%" style="stop-color:#00cc6a;stop-opacity:0.8" />
-                <stop offset="100%" style="stop-color:#00f3ff;stop-opacity:0.6" />
-            </linearGradient>
-        </defs>
-    </svg>
-
     <div class="bg"></div>
-    
-    <div class="orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
+    <div class="particles" id="particles"></div>
+
+    <div class="falling-feather" style="left: 10%; animation-delay: 0s;">🪶</div>
+    <div class="falling-feather" style="left: 30%; animation-delay: 2s;">🍃</div>
+    <div class="falling-feather" style="left: 50%; animation-delay: 4s;">🪶</div>
+    <div class="falling-feather" style="left: 70%; animation-delay: 6s;">🍃</div>
+    <div class="falling-feather" style="left: 90%; animation-delay: 8s;">🪶</div>
 
     <div class="container">
         <div class="card">
-            <div class="profile-wrap">
+            <div class="profile-section">
+                <!-- WINGS -->
                 <div class="wings-container">
-                    <!-- Left Wing -->
-                    <div class="wing wing-left">
-                        <svg viewBox="0 0 100 140">
-                            <path d="M80 70 Q60 20 20 10 Q40 40 30 70 Q20 100 10 130 Q50 110 80 70 Z" />
-                            <path d="M80 70 Q70 50 50 45 Q60 60 55 75 Q50 90 45 105 Q65 90 80 70 Z" opacity="0.6"/>
-                            <path d="M75 65 Q65 40 40 35 Q50 50 48 65 Q45 80 42 95 Q60 80 75 65 Z" opacity="0.4"/>
-                        </svg>
-                    </div>
-                    
-                    <!-- Right Wing -->
-                    <div class="wing wing-right">
-                        <svg viewBox="0 0 100 140">
-                            <path d="M80 70 Q60 20 20 10 Q40 40 30 70 Q20 100 10 130 Q50 110 80 70 Z" />
-                            <path d="M80 70 Q70 50 50 45 Q60 60 55 75 Q50 90 45 105 Q65 90 80 70 Z" opacity="0.6"/>
-                            <path d="M75 65 Q65 40 40 35 Q50 50 48 65 Q45 80 42 95 Q60 80 75 65 Z" opacity="0.4"/>
-                        </svg>
+                    <!-- LEFT WING -->
+                    <div class="wing-left">
+                        <div class="wing-glow"></div>
+                        <div class="feather feather-main feather-1"></div>
+                        <div class="feather feather-main feather-2"></div>
+                        <div class="feather feather-main feather-3"></div>
+                        <div class="feather feather-main feather-4"></div>
+                        <div class="feather feather-main feather-5"></div>
+                        <div class="feather feather-secondary feather-6"></div>
+                        <div class="feather feather-secondary feather-7"></div>
+                        <div class="feather feather-secondary feather-8"></div>
+                        <div class="feather feather-tip feather-9"></div>
+                        <div class="feather feather-tip feather-10"></div>
+                        <div class="feather feather-tip feather-11"></div>
                     </div>
 
+                    <!-- RIGHT WING -->
+                    <div class="wing-right">
+                        <div class="wing-glow"></div>
+                        <div class="feather feather-main feather-1"></div>
+                        <div class="feather feather-main feather-2"></div>
+                        <div class="feather feather-main feather-3"></div>
+                        <div class="feather feather-main feather-4"></div>
+                        <div class="feather feather-main feather-5"></div>
+                        <div class="feather feather-secondary feather-6"></div>
+                        <div class="feather feather-secondary feather-7"></div>
+                        <div class="feather feather-secondary feather-8"></div>
+                        <div class="feather feather-tip feather-9"></div>
+                        <div class="feather feather-tip feather-10"></div>
+                        <div class="feather feather-tip feather-11"></div>
+                    </div>
+                </div>
+
+                <div class="avatar-wrapper">
                     <div class="crown">👑</div>
-                    
+                    <div class="avatar-glow"></div>
                     <div class="avatar">
-                        <div class="avatar-inner">
-                            <img src="profile.jpg" id="profileImg" alt="GreenBoyMC" onerror="this.style.display='none'; document.getElementById('placeholder').style.display='flex';">
-                            <div id="placeholder" style="display: none; width: 100%; height: 100%; background: linear-gradient(135deg, #0a3a2a, #0a5a3a); align-items: center; justify-content: center; font-size: 4rem;">
-                                🟢
-                            </div>
+                        <img src="profile.jpg" id="profileImg" alt="GreenBoyMC" onerror="this.style.display='none'; document.getElementById('placeholder').style.display='flex';">
+                        <div id="placeholder" class="avatar-placeholder" style="display: none;">
+                            🟢
                         </div>
                     </div>
                 </div>
@@ -526,9 +627,13 @@
             </div>
 
             <div class="content">
-                <div class="badge">✦ MINECRAFT DEV ✦</div>
+                <div class="badge">
+                    <span>🪽</span>
+                    <span>ANGEL DEVELOPER</span>
+                    <span>🪽</span>
+                </div>
                 <h1>GreenBoyMC</h1>
-                <p class="subtitle">Python Developer & Builder</p>
+                <p class="subtitle">Python Developer & Sky Warrior</p>
 
                 <div class="stats">
                     <div class="stat">
@@ -547,14 +652,14 @@
                         <div class="stat-label">Projects</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-icon">🌿</div>
+                        <div class="stat-icon">🪽</div>
                         <div class="stat-value">∞</div>
-                        <div class="stat-label">Nature</div>
+                        <div class="stat-label">Flight</div>
                     </div>
                 </div>
 
                 <div class="skills">
-                    <div class="section-title">Tech Stack</div>
+                    <div class="section-title">TECH STACK</div>
                     <div class="skill-grid">
                         <div class="skill"><span>🐍</span><span>Python</span></div>
                         <div class="skill"><span>⚡</span><span>FastAPI</span></div>
@@ -569,7 +674,7 @@
 
                 <div class="xp">
                     <div class="xp-header">
-                        <span>Experience</span>
+                        <span>Experience Level</span>
                         <span>87%</span>
                     </div>
                     <div class="xp-bar">
@@ -578,7 +683,7 @@
                 </div>
 
                 <div class="social">
-                    <div class="section-title">Connect</div>
+                    <div class="section-title">CONNECT</div>
                     <div class="social-grid">
                         <a href="#" class="social-btn">🐙</a>
                         <a href="#" class="social-btn">💬</a>
@@ -593,31 +698,27 @@
 
     <div class="achievement" id="achievement">
         <div class="achievement-icon">🏆</div>
-        <div class="achievement-text">
-            <h4 style="color: var(--green); font-family: 'VT323';">Achievement Unlocked!</h4>
-            <p style="color: rgba(255,255,255,0.6);">GreenBoyMC Profile Visited</p>
+        <div>
+            <h4 style="color: var(--green); font-family: 'VT323'; font-size: 1.2rem;">Achievement Unlocked!</h4>
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Angel Wings Activated</p>
         </div>
     </div>
 
     <script>
-        // Leaf particles
-        for (let i = 0; i < 15; i++) {
-            const leaf = document.createElement('div');
-            leaf.className = 'leaf';
-            leaf.innerHTML = ['🍃', '🌿', '🌱'][Math.floor(Math.random() * 3)];
-            leaf.style.left = Math.random() * 100 + '%';
-            leaf.style.animationDelay = Math.random() * 10 + 's';
-            leaf.style.animationDuration = (8 + Math.random() * 6) + 's';
-            document.body.appendChild(leaf);
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 20 + 's';
+            p.style.animationDuration = (15 + Math.random() * 10) + 's';
+            document.getElementById('particles').appendChild(p);
         }
 
-        // Achievement
         setTimeout(() => {
             document.getElementById('achievement').classList.add('show');
             setTimeout(() => document.getElementById('achievement').classList.remove('show'), 3000);
         }, 1000);
 
-        // Upload
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
