@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Developer Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --minecraft-grass: #5D8C47;
+            --minecraft-dirt: #866043;
+            --minecraft-stone: #7D7D7D;
+            --minecraft-diamond: #4AEDD9;
+            --minecraft-gold: #F4D142;
+            --minecraft-red: #B02E26;
+            --minecraft-purple: #7B2CBF;
+            --minecraft-pink: #E85D9A;
+            --dark-bg: #1a0b2e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Nether Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(123, 44, 191, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(232, 93, 154, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 40%, rgba(74, 237, 217, 0.2) 0%, transparent 50%),
+                linear-gradient(180deg, #1a0b2e 0%, #2d1b4e 50%, #1a0b2e 100%);
+        }
+
+        /* Floating Blocks */
+        .blocks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-block {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-size: cover;
+            opacity: 0.6;
+            animation: floatBlock 20s infinite linear;
+            filter: drop-shadow(0 0 10px rgba(74, 237, 217, 0.5));
+        }
+
+        .block-grass { background: linear-gradient(135deg, #5D8C47 50%, #866043 50%); }
+        .block-diamond { background: linear-gradient(135deg, #4AEDD9 50%, #2E8B7B 50%); box-shadow: 0 0 20px #4AEDD9; }
+        .block-gold { background: linear-gradient(135deg, #F4D142 50%, #B8860B 50%); box-shadow: 0 0 20px #F4D142; }
+        .block-redstone { background: linear-gradient(135deg, #B02E26 50%, #8B0000 50%); box-shadow: 0 0 20px #B02E26; }
+
+        @keyframes floatBlock {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Pixel Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .pixel {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--minecraft-diamond);
+            animation: pixelFloat 10s infinite;
+            box-shadow: 0 0 6px var(--minecraft-diamond);
+        }
+
+        @keyframes pixelFloat {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(20px); opacity: 0; }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* Profile Card - Minecraft Style */
+        .profile-card {
+            background: rgba(26, 11, 46, 0.9);
+            border: 4px solid;
+            border-image: linear-gradient(45deg, var(--minecraft-diamond), var(--minecraft-purple), var(--minecraft-pink)) 1;
+            padding: 3rem;
+            margin-top: 2rem;
+            position: relative;
+            box-shadow: 
+                0 0 50px rgba(123, 44, 191, 0.5),
+                inset 0 0 50px rgba(74, 237, 217, 0.1);
+            animation: cardPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes cardPulse {
+            0%, 100% { box-shadow: 0 0 50px rgba(123, 44, 191, 0.5), inset 0 0 50px rgba(74, 237, 217, 0.1); }
+            50% { box-shadow: 0 0 80px rgba(232, 93, 154, 0.6), inset 0 0 80px rgba(74, 237, 217, 0.2); }
+        }
+
+        /* Corner Decorations */
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--minecraft-diamond);
+        }
+
+        .corner-tl { top: -4px; left: -4px; border-right: none; border-bottom: none; }
+        .corner-tr { top: -4px; right: -4px; border-left: none; border-bottom: none; }
+        .corner-bl { bottom: -4px; left: -4px; border-right: none; border-top: none; }
+        .corner-br { bottom: -4px; right: -4px; border-left: none; border-top: none; }
+
+        /* Profile Image */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-frame {
+            display: inline-block;
+            position: relative;
+            padding: 10px;
+            background: linear-gradient(45deg, var(--minecraft-diamond), var(--minecraft-purple), var(--minecraft-pink), var(--minecraft-gold));
+            background-size: 400% 400%;
+            animation: gradientShift 5s ease infinite;
+            clip-path: polygon(
+                10% 0%, 90% 0%, 100% 10%, 100% 90%, 
+                90% 100%, 10% 100%, 0% 90%, 0% 10%
+            );
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .profile-image {
+            width: 280px;
+            height: 280px;
+            object-fit: cover;
+            clip-path: polygon(
+                10% 0%, 90% 0%, 100% 10%, 100% 90%, 
+                90% 100%, 10% 100%, 0% 90%, 0% 10%
+            );
+            display: block;
+            filter: contrast(1.1) saturate(1.2);
+            transition: transform 0.3s;
+        }
+
+        .profile-frame:hover .profile-image {
+            transform: scale(1.05);
+        }
+
+        /* Crown Badge */
+        .crown-badge {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            filter: drop-shadow(0 0 10px var(--minecraft-gold));
+            animation: crownFloat 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        @keyframes crownFloat {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* Content */
+        .content {
+            text-align: center;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--minecraft-purple), var(--minecraft-pink));
+            color: #fff;
+            padding: 0.5rem 2rem;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            position: relative;
+            clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+            animation: badgeGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        h1 {
+            font-family: 'VT323', monospace;
+            font-size: 4rem;
+            color: var(--minecraft-gold);
+            text-shadow: 
+                3px 3px 0px #B8860B,
+                0 0 30px rgba(244, 209, 66, 0.5);
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-family: 'VT323', monospace;
+            font-size: 1.8rem;
+            color: var(--minecraft-diamond);
+            text-shadow: 0 0 10px rgba(74, 237, 217, 0.5);
+            margin-bottom: 2rem;
+        }
+
+        /* Stats - Minecraft Hearts Style */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--minecraft-stone);
+            padding: 1.5rem;
+            min-width: 120px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .stat-box:hover {
+            border-color: var(--minecraft-diamond);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(74, 237, 217, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'VT323', monospace;
+            font-size: 2.5rem;
+            color: var(--minecraft-gold);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Skills - Inventory Style */
+        .skills-section {
+            margin: 2rem 0;
+        }
+
+        .section-title {
+            font-family: 'VT323', monospace;
+            font-size: 2rem;
+            color: var(--minecraft-diamond);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(74, 237, 217, 0.5);
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 3px solid var(--minecraft-stone);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .inventory-slot {
+            aspect-ratio: 1;
+            background: rgba(139, 139, 139, 0.2);
+            border: 2px solid #555;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inventory-slot::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .inventory-slot:hover::before {
+            left: 100%;
+        }
+
+        .inventory-slot:hover {
+            border-color: var(--minecraft-diamond);
+            background: rgba(74, 237, 217, 0.1);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(74, 237, 217, 0.5);
+        }
+
+        .slot-icon {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .slot-name {
+            font-size: 0.7rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Experience Bar */
+        .xp-section {
+            margin: 2rem 0;
+        }
+
+        .xp-bar-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border: 2px solid var(--minecraft-stone);
+        }
+
+        .xp-label {
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            color: var(--minecraft-gold);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .xp-bar {
+            height: 20px;
+            background: #333;
+            border: 2px solid #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .xp-fill {
+            height: 100%;
+            width: 87%;
+            background: linear-gradient(90deg, var(--minecraft-purple), var(--minecraft-pink));
+            position: relative;
+            animation: xpShine 2s infinite;
+        }
+
+        @keyframes xpShine {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+            100% { filter: brightness(1); }
+        }
+
+        .xp-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: slide 1s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(20px); }
+        }
+
+        /* Social Links */
+        .social-section {
+            margin-top: 2rem;
+        }
+
+        .social-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--minecraft-stone), #555);
+            border: 3px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 
+                inset 0 0 10px rgba(0,0,0,0.5),
+                0 5px 0 #222;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                inset 0 0 20px rgba(74, 237, 217, 0.3),
+                0 10px 20px rgba(74, 237, 217, 0.4);
+            border-color: var(--minecraft-diamond);
+        }
+
+        .social-btn:active {
+            transform: translateY(0);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        /* Achievement Notification */
+        .achievement {
+            position: fixed;
+            bottom: -100px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid var(--minecraft-gold);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: bottom 0.5s;
+            z-index: 1000;
+            box-shadow: 0 0 30px rgba(244, 209, 66, 0.3);
+        }
+
+        .achievement.show {
+            bottom: 20px;
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+        }
+
+        .achievement-text h4 {
+            color: var(--minecraft-gold);
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+        }
+
+        .achievement-text p {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .profile-image { width: 200px; height: 200px; }
+            .stats { gap: 1rem; }
+            .stat-box { min-width: 100px; padding: 1rem; }
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--minecraft-red);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--minecraft-diamond);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim2 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 85px, 0); }
+            20% { clip: rect(63px, 9999px, 130px, 0); }
+            40% { clip: rect(25px, 9999px, 5px, 0); }
+            60% { clip: rect(76px, 9999px, 100px, 0); }
+            80% { clip: rect(15px, 9999px, 170px, 0); }
+            100% { clip: rect(50px, 9999px, 90px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(20px, 9999px, 60px, 0); }
+            40% { clip: rect(90px, 9999px, 140px, 0); }
+            60% { clip: rect(40px, 9999px, 80px, 0); }
+            80% { clip: rect(10px, 9999px, 50px, 0); }
+            100% { clip: rect(70px, 9999px, 120px, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <!-- Floating Blocks -->
+    <div class="blocks-container" id="blocks"></div>
+    
+    <!-- Pixel Particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+
+            <div class="profile-section">
+                <div class="profile-frame">
+                    <div class="crown-badge">👑</div>
+                    <img src="novaskin-wallpaper-thewarpedforest.jpg" alt="Minecraft Profile" class="profile-image">
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="rank-badge">✦ Nether King ✦</div>
+                <h1 class="glitch" data-text="WARPED_KING">WARPED_KING</h1>
+                <p class="subtitle">&lt;Python_Developer /&gt;</p>
+
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-icon">💎</div>
+                        <div class="stat-value">999+</div>
+                        <div class="stat-label">Diamonds</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">⚔️</div>
+                        <div class="stat-value">Lv.99</div>
+                        <div class="stat-label">Combat</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">🏰</div>
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">☕</div>
+                        <div class="stat-value">∞</div>
+                        <div class="stat-label">Coffee</div>
+                    </div>
+                </div>
+
+                <div class="skills-section">
+                    <h3 class="section-title">[ Inventory ]</h3>
+                    <div class="inventory-grid">
+                        <div class="inventory-slot" onclick="showTooltip('Python')">
+                            <div class="slot-icon">🐍</div>
+                            <div class="slot-name">Python</div>
+                        </div>
+                        <div class="inventory-slot" onclick="showTooltip('Django')">
+                            <div class="slot-icon">🎯</div>
+                            <div class="slot-name">Django</div>
+                        </div>
+                        <div class="inventory-slot" onclick="showTooltip('FastAPI')">
+                            <div class="slot-icon">⚡</div>
+                            <div class="slot-name">FastAPI</div>
+                        </div>
+                        <div class="inventory-slot" onclick="showTooltip('Docker')">
+                            <div class="slot-icon">🐳</div>
+                            <div class="slot-name">Docker</div>
+                        </div>
+                        <div class="inventory-slot" onclick="showTooltip('AWS')">
+                            <div class="slot-icon">☁️</div>
+                            <div class="slot-name">AWS</div>
+                        </div>
+                        <div class="inventory-slot" onclick="showTooltip('PostgreSQL')">
+                            <div class="slot-icon">🐘</div>
+                            <div class="slot-name">Postgre</div>
+                        </div>
+                        <div class="inventory-slot" onclick="showTooltip('Redis')">
+                            <div class="slot-icon">🔴</div>
+                            <div class="slot-name">Redis</div>
+                        </div>
+                        <div class="inventory-slot" onclick="showTooltip('Git')">
+                            <div class="slot-icon">📦</div>
+                            <div class="slot-name">Git</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="xp-section">
+                    <div class="xp-bar-container">
+                        <div class="xp-label">
+                            <span>Experience Level</span>
+                            <span>87%</span>
+                        </div>
+                        <div class="xp-bar">
+                            <div class="xp-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="social-section">
+                    <h3 class="section-title">[ Connect ]</h3>
+                    <div class="social-grid">
+                        <a href="#" class="social-btn" title="GitHub">🐙</a>
+                        <a href="#" class="social-btn" title="Discord">💬</a>
+                        <a href="#" class="social-btn" title="Twitter">🐦</a>
+                        <a href="#" class="social-btn" title="Email">✉️</a>
+                        <a href="#" class="social-btn" title="LinkedIn">💼</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement" id="achievement">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-text">
+            <h4>Achievement Unlocked!</h4>
+            <p>Visited Python Developer's Profile</p>
+        </div>
+    </div>
+
+    <script>
+        // Generate Floating Blocks
+        const blocksContainer = document.getElementById('blocks');
+        const blockTypes = ['block-grass', 'block-diamond', 'block-gold', 'block-redstone'];
+        
+        for (let i = 0; i < 15; i++) {
+            const block = document.createElement('div');
+            block.className = `floating-block ${blockTypes[Math.floor(Math.random() * blockTypes.length)]}`;
+            block.style.left = Math.random() * 100 + '%';
+            block.style.animationDelay = Math.random() * 20 + 's';
+            block.style.animationDuration = (15 + Math.random() * 10) + 's';
+            blocksContainer.appendChild(block);
+        }
+
+        // Generate Pixel Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const pixel = document.createElement('div');
+            pixel.className = 'pixel';
+            pixel.style.left = Math.random() * 100 + '%';
+            pixel.style.top = Math.random() * 100 + '%';
+            pixel.style.animationDelay = Math.random() * 10 + 's';
+            pixel.style.animationDuration = (5 + Math.random() * 5) + 's';
+            particlesContainer.appendChild(pixel);
+        }
+
+        // Show Achievement on Load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('achievement').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('achievement').classList.remove('show');
+                }, 4000);
+            }, 1000);
+        });
+
+        // Tooltip function
+        function showTooltip(skill) {
+            console.log(`Selected: ${skill}`);
+        }
+
+        // Mouse Parallax
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            
+            document.querySelector('.profile-card').style.transform = 
+                `perspective(1000px) rotateY(${x * 0.1}deg) rotateX(${y * -0.1}deg)`;
+        });
+
+        // Glitch effect randomizer
+        setInterval(() => {
+            const glitch = document.querySelector('.glitch');
+            glitch.style.animation = 'none';
+            setTimeout(() => {
+                glitch.style.animation = '';
+            }, 10);
+        }, 5000);
+    </script>
+</body>
+</html>
