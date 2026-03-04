@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Developer Profile</title>
+    <title>GreenBoyMC - Minecraft Developer</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -20,12 +20,13 @@
         }
 
         :root {
+            --green: #00ff88;
+            --green-dark: #00cc6a;
             --diamond: #00f3ff;
             --purple: #b829dd;
-            --pink: #ff2d95;
             --gold: #ffd700;
-            --dark: #0a0a0f;
-            --glass: rgba(255, 255, 255, 0.03);
+            --dark: #0a0f0a;
+            --glass: rgba(0, 255, 136, 0.03);
         }
 
         body {
@@ -42,10 +43,10 @@
             inset: 0;
             z-index: -2;
             background: 
-                radial-gradient(ellipse at 20% 80%, rgba(184, 41, 221, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(255, 45, 149, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 70%),
-                linear-gradient(180deg, #0a0a0f 0%, #1a0a1a 50%, #0a0a0f 100%);
+                radial-gradient(ellipse at 20% 80%, rgba(0, 255, 136, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 70%),
+                linear-gradient(180deg, #0a0f0a 0%, #0a1a0f 50%, #0a0f0a 100%);
         }
 
         /* Floating Orbs */
@@ -64,9 +65,9 @@
             animation: float 20s infinite ease-in-out;
         }
 
-        .orb-1 { width: 400px; height: 400px; background: var(--purple); top: -10%; left: -10%; animation-delay: 0s; }
-        .orb-2 { width: 300px; height: 300px; background: var(--pink); bottom: -5%; right: -5%; animation-delay: -5s; }
-        .orb-3 { width: 200px; height: 200px; background: var(--diamond); top: 40%; left: 60%; animation-delay: -10s; }
+        .orb-1 { width: 400px; height: 400px; background: var(--green); top: -10%; left: -10%; animation-delay: 0s; }
+        .orb-2 { width: 300px; height: 300px; background: var(--diamond); bottom: -5%; right: -5%; animation-delay: -5s; }
+        .orb-3 { width: 200px; height: 200px; background: var(--green-dark); top: 40%; left: 60%; animation-delay: -10s; }
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
@@ -81,7 +82,7 @@
             padding: 2rem 1rem;
         }
 
-        /* Card - Glassmorphism */
+        /* Card */
         .card {
             background: var(--glass);
             backdrop-filter: blur(20px);
@@ -98,7 +99,7 @@
             inset: 0;
             border-radius: 30px;
             padding: 1px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,243,255,0.1));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
@@ -106,33 +107,81 @@
             pointer-events: none;
         }
 
-        /* Profile Image */
+        /* Profile with Wings */
         .profile-wrap {
             text-align: center;
             margin-bottom: 2rem;
+            position: relative;
         }
 
+        .wings-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Wings */
+        .wing {
+            position: absolute;
+            top: 50%;
+            width: 150px;
+            height: 200px;
+            transform: translateY(-50%);
+            opacity: 0.8;
+            animation: flap 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px var(--green));
+        }
+
+        .wing-left {
+            left: -120px;
+            transform: translateY(-50%) scaleX(-1);
+            animation-delay: 0s;
+        }
+
+        .wing-right {
+            right: -120px;
+            transform: translateY(-50%);
+            animation-delay: 0.1s;
+        }
+
+        @keyframes flap {
+            0%, 100% { transform: translateY(-50%) rotate(0deg) scaleX(var(--scale, 1)); }
+            25% { transform: translateY(-50%) rotate(-10deg) scaleX(var(--scale, 1)); }
+            50% { transform: translateY(-50%) rotate(5deg) scaleX(var(--scale, 1)); }
+            75% { transform: translateY(-50%) rotate(-5deg) scaleX(var(--scale, 1)); }
+        }
+
+        .wing-left { --scale: -1; }
+
+        .wing svg {
+            width: 100%;
+            height: 100%;
+            fill: url(#wingGradient);
+        }
+
+        /* Avatar */
         .avatar {
             position: relative;
             display: inline-block;
             padding: 4px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--diamond), var(--purple), var(--pink));
-            animation: rotate 4s linear infinite;
+            background: linear-gradient(135deg, var(--green), var(--diamond));
+            animation: rotate 6s linear infinite;
+            z-index: 10;
         }
 
         @keyframes rotate {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
+            0% { filter: hue-rotate(0deg) drop-shadow(0 0 20px var(--green)); }
+            100% { filter: hue-rotate(360deg) drop-shadow(0 0 20px var(--green)); }
         }
 
         .avatar-inner {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             overflow: hidden;
             position: relative;
-            animation: rotate 4s linear infinite reverse;
+            animation: rotate 6s linear infinite reverse;
+            background: linear-gradient(135deg, #0a2a1a, #0a3a2a);
         }
 
         .avatar img {
@@ -144,11 +193,11 @@
 
         .crown {
             position: absolute;
-            top: -15px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 2.5rem;
-            z-index: 10;
+            z-index: 20;
             filter: drop-shadow(0 0 20px var(--gold));
             animation: bounce 2s infinite;
         }
@@ -158,6 +207,22 @@
             50% { transform: translateX(-50%) translateY(-10px); }
         }
 
+        /* Leaf particles */
+        .leaf {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: fall 10s infinite linear;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
         /* Upload */
         .upload {
             text-align: center;
@@ -165,7 +230,7 @@
         }
 
         .upload-btn {
-            background: linear-gradient(135deg, rgba(184, 41, 221, 0.3), rgba(255, 45, 149, 0.3));
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 243, 255, 0.2));
             padding: 1rem 2rem;
             border-radius: 50px;
             color: #fff;
@@ -180,11 +245,8 @@
 
         .upload-btn:hover {
             transform: translateY(-2px);
-            background: linear-gradient(135deg, rgba(184, 41, 221, 0.5), rgba(255, 45, 149, 0.5));
-        }
-
-        .upload-btn:active {
-            transform: scale(0.98);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.4), rgba(0, 243, 255, 0.4));
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
         }
 
         /* Content */
@@ -194,24 +256,31 @@
 
         .badge {
             display: inline-block;
-            background: linear-gradient(135deg, rgba(184, 41, 221, 0.2), rgba(255, 45, 149, 0.2));
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 243, 255, 0.2));
             padding: 0.4rem 1.5rem;
             border-radius: 50px;
             font-family: 'VT323', monospace;
             font-size: 1rem;
-            color: var(--pink);
+            color: var(--green);
             margin-bottom: 1rem;
             letter-spacing: 2px;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.6); }
         }
 
         h1 {
             font-family: 'VT323', monospace;
-            font-size: 3.5rem;
-            background: linear-gradient(135deg, #fff, var(--diamond));
+            font-size: 4rem;
+            background: linear-gradient(135deg, var(--green), var(--diamond));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 0.5rem;
-            text-shadow: 0 0 40px rgba(0, 243, 255, 0.3);
+            text-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+            letter-spacing: 3px;
         }
 
         .subtitle {
@@ -230,15 +299,16 @@
         }
 
         .stat {
-            background: rgba(255,255,255,0.03);
+            background: rgba(0, 255, 136, 0.05);
             padding: 1.5rem 1rem;
             border-radius: 20px;
             transition: all 0.3s;
         }
 
         .stat:hover {
-            background: rgba(255,255,255,0.06);
+            background: rgba(0, 255, 136, 0.1);
             transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
         }
 
         .stat-icon {
@@ -249,8 +319,8 @@
         .stat-value {
             font-family: 'VT323', monospace;
             font-size: 2rem;
-            color: var(--gold);
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            color: var(--green);
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
         }
 
         .stat-label {
@@ -281,7 +351,7 @@
         }
 
         .skill {
-            background: rgba(255,255,255,0.05);
+            background: rgba(0, 255, 136, 0.08);
             padding: 0.8rem 1.2rem;
             border-radius: 12px;
             display: flex;
@@ -292,17 +362,9 @@
         }
 
         .skill:hover {
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(0, 255, 136, 0.2);
             transform: scale(1.05);
-        }
-
-        .skill span:first-child {
-            font-size: 1.2rem;
-        }
-
-        .skill span:last-child {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.8);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
         }
 
         /* XP Bar */
@@ -332,15 +394,10 @@
         .xp-fill {
             height: 100%;
             width: 87%;
-            background: linear-gradient(90deg, var(--purple), var(--pink));
+            background: linear-gradient(90deg, var(--green), var(--diamond));
             border-radius: 4px;
-            box-shadow: 0 0 20px var(--pink);
+            box-shadow: 0 0 20px var(--green);
             animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
         }
 
         /* Social */
@@ -357,7 +414,7 @@
         .social-btn {
             width: 50px;
             height: 50px;
-            background: rgba(255,255,255,0.05);
+            background: rgba(0, 255, 136, 0.1);
             border-radius: 15px;
             display: flex;
             align-items: center;
@@ -365,11 +422,13 @@
             font-size: 1.3rem;
             transition: all 0.3s;
             text-decoration: none;
+            color: #fff;
         }
 
         .social-btn:hover {
-            background: rgba(0, 243, 255, 0.2);
+            background: rgba(0, 255, 136, 0.3);
             transform: translateY(-3px) rotate(5deg);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
         }
 
         /* Achievement */
@@ -377,7 +436,7 @@
             position: fixed;
             bottom: -100px;
             right: 20px;
-            background: rgba(10, 10, 15, 0.95);
+            background: rgba(10, 15, 10, 0.95);
             padding: 1rem 1.5rem;
             border-radius: 15px;
             display: flex;
@@ -392,56 +451,30 @@
             bottom: 20px;
         }
 
-        .achievement-icon {
-            font-size: 2rem;
-        }
-
-        .achievement-text h4 {
-            color: var(--gold);
-            font-family: 'VT323', monospace;
-            font-size: 1.1rem;
-        }
-
-        .achievement-text p {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.85rem;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .stats { grid-template-columns: repeat(2, 1fr); }
-            .avatar-inner { width: 150px; height: 150px; }
+            .avatar-inner { width: 140px; height: 140px; }
             .card { padding: 2rem 1rem; }
-        }
-
-        /* Particles */
-        .particles {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--diamond);
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: particle 15s infinite;
-        }
-
-        @keyframes particle {
-            0% { transform: translateY(100vh); opacity: 0; }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.5; }
-            100% { transform: translateY(-100px); opacity: 0; }
+            .wing { width: 100px; height: 140px; }
+            .wing-left { left: -80px; }
+            .wing-right { right: -80px; }
         }
     </style>
 </head>
 <body>
+    <!-- SVG Gradient -->
+    <svg width="0" height="0">
+        <defs>
+            <linearGradient id="wingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#00cc6a;stop-opacity:0.8" />
+                <stop offset="100%" style="stop-color:#00f3ff;stop-opacity:0.6" />
+            </linearGradient>
+        </defs>
+    </svg>
+
     <div class="bg"></div>
     
     <div class="orbs">
@@ -450,17 +483,36 @@
         <div class="orb orb-3"></div>
     </div>
 
-    <div class="particles" id="particles"></div>
-
     <div class="container">
         <div class="card">
             <div class="profile-wrap">
-                <div class="avatar">
+                <div class="wings-container">
+                    <!-- Left Wing -->
+                    <div class="wing wing-left">
+                        <svg viewBox="0 0 100 140">
+                            <path d="M80 70 Q60 20 20 10 Q40 40 30 70 Q20 100 10 130 Q50 110 80 70 Z" />
+                            <path d="M80 70 Q70 50 50 45 Q60 60 55 75 Q50 90 45 105 Q65 90 80 70 Z" opacity="0.6"/>
+                            <path d="M75 65 Q65 40 40 35 Q50 50 48 65 Q45 80 42 95 Q60 80 75 65 Z" opacity="0.4"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Right Wing -->
+                    <div class="wing wing-right">
+                        <svg viewBox="0 0 100 140">
+                            <path d="M80 70 Q60 20 20 10 Q40 40 30 70 Q20 100 10 130 Q50 110 80 70 Z" />
+                            <path d="M80 70 Q70 50 50 45 Q60 60 55 75 Q50 90 45 105 Q65 90 80 70 Z" opacity="0.6"/>
+                            <path d="M75 65 Q65 40 40 35 Q50 50 48 65 Q45 80 42 95 Q60 80 75 65 Z" opacity="0.4"/>
+                        </svg>
+                    </div>
+
                     <div class="crown">👑</div>
-                    <div class="avatar-inner">
-                        <img src="profile.jpg" id="profileImg" alt="Profile" onerror="this.style.display='none'; document.getElementById('placeholder').style.display='flex';">
-                        <div id="placeholder" style="display: none; width: 100%; height: 100%; background: linear-gradient(135deg, var(--purple), var(--pink)); align-items: center; justify-content: center; font-size: 3rem;">
-                            🎮
+                    
+                    <div class="avatar">
+                        <div class="avatar-inner">
+                            <img src="profile.jpg" id="profileImg" alt="GreenBoyMC" onerror="this.style.display='none'; document.getElementById('placeholder').style.display='flex';">
+                            <div id="placeholder" style="display: none; width: 100%; height: 100%; background: linear-gradient(135deg, #0a3a2a, #0a5a3a); align-items: center; justify-content: center; font-size: 4rem;">
+                                🟢
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -469,14 +521,14 @@
             <div class="upload">
                 <input type="file" id="fileInput" accept="image/*" style="display: none;">
                 <div class="upload-btn" onclick="document.getElementById('fileInput').click()">
-                    📷 Chọn ảnh
+                    🌿 Chọn ảnh
                 </div>
             </div>
 
             <div class="content">
-                <div class="badge">✦ PYTHON DEV ✦</div>
-                <h1>WARPED_KING</h1>
-                <p class="subtitle">Full Stack Developer</p>
+                <div class="badge">✦ MINECRAFT DEV ✦</div>
+                <h1>GreenBoyMC</h1>
+                <p class="subtitle">Python Developer & Builder</p>
 
                 <div class="stats">
                     <div class="stat">
@@ -495,9 +547,9 @@
                         <div class="stat-label">Projects</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-icon">☕</div>
+                        <div class="stat-icon">🌿</div>
                         <div class="stat-value">∞</div>
-                        <div class="stat-label">Coffee</div>
+                        <div class="stat-label">Nature</div>
                     </div>
                 </div>
 
@@ -511,7 +563,7 @@
                         <div class="skill"><span>☁️</span><span>AWS</span></div>
                         <div class="skill"><span>🐘</span><span>PostgreSQL</span></div>
                         <div class="skill"><span>📦</span><span>Git</span></div>
-                        <div class="skill"><span>🔴</span><span>Redis</span></div>
+                        <div class="skill"><span>🟩</span><span>Minecraft</span></div>
                     </div>
                 </div>
 
@@ -542,21 +594,21 @@
     <div class="achievement" id="achievement">
         <div class="achievement-icon">🏆</div>
         <div class="achievement-text">
-            <h4>Achievement Unlocked!</h4>
-            <p>Profile Visited</p>
+            <h4 style="color: var(--green); font-family: 'VT323';">Achievement Unlocked!</h4>
+            <p style="color: rgba(255,255,255,0.6);">GreenBoyMC Profile Visited</p>
         </div>
     </div>
 
     <script>
-        // Particles
-        const particles = document.getElementById('particles');
-        for (let i = 0; i < 30; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + '%';
-            p.style.animationDelay = Math.random() * 15 + 's';
-            p.style.animationDuration = (10 + Math.random() * 10) + 's';
-            particles.appendChild(p);
+        // Leaf particles
+        for (let i = 0; i < 15; i++) {
+            const leaf = document.createElement('div');
+            leaf.className = 'leaf';
+            leaf.innerHTML = ['🍃', '🌿', '🌱'][Math.floor(Math.random() * 3)];
+            leaf.style.left = Math.random() * 100 + '%';
+            leaf.style.animationDelay = Math.random() * 10 + 's';
+            leaf.style.animationDuration = (8 + Math.random() * 6) + 's';
+            document.body.appendChild(leaf);
         }
 
         // Achievement
