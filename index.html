@@ -147,7 +147,7 @@
         .corner-bl { bottom: -4px; left: -4px; border-right: none; border-top: none; }
         .corner-br { bottom: -4px; right: -4px; border-left: none; border-top: none; }
 
-        /* Profile Image */
+        /* Profile Image - FIXED */
         .profile-section {
             text-align: center;
             margin-bottom: 2rem;
@@ -183,6 +183,7 @@
             display: block;
             filter: contrast(1.1) saturate(1.2);
             transition: transform 0.3s;
+            background: #2d1b4e; /* Fallback color */
         }
 
         .profile-frame:hover .profile-image {
@@ -459,6 +460,8 @@
             box-shadow: 
                 inset 0 0 10px rgba(0,0,0,0.5),
                 0 5px 0 #222;
+            text-decoration: none;
+            color: #fff;
         }
 
         .social-btn:hover {
@@ -509,12 +512,45 @@
             font-size: 0.9rem;
         }
 
+        /* Image Upload Section */
+        .upload-section {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px dashed var(--minecraft-diamond);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, var(--minecraft-purple), var(--minecraft-pink));
+            border: none;
+            padding: 1rem 2rem;
+            color: #fff;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .upload-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(232, 93, 154, 0.5);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .profile-image { width: 200px; height: 200px; }
             .stats { gap: 1rem; }
             .stat-box { min-width: 100px; padding: 1rem; }
+            .container { padding: 1rem; }
+            .profile-card { padding: 2rem 1rem; }
         }
 
         /* Glitch Effect */
@@ -563,6 +599,14 @@
             80% { clip: rect(10px, 9999px, 50px, 0); }
             100% { clip: rect(70px, 9999px, 120px, 0); }
         }
+
+        /* Error Message */
+        .error-msg {
+            color: var(--minecraft-red);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -584,8 +628,35 @@
             <div class="profile-section">
                 <div class="profile-frame">
                     <div class="crown-badge">👑</div>
-                    <img src="novaskin-wallpaper-thewarpedforest.jpg" alt="Minecraft Profile" class="profile-image">
+                    <!-- 
+                        SỬA TÊN FILE Ở ĐÂY:
+                        - Đổi "profile.jpg" thành tên file ảnh của bạn
+                        - Ví dụ: "IMG_4058.PNG", "avatar.png", "me.jpg"
+                    -->
+                    <img src="profile.jpg" 
+                         alt="Minecraft Profile" 
+                         class="profile-image" 
+                         id="profileImg"
+                         onerror="this.style.display='none'; document.getElementById('errorMsg').style.display='block';">
+                    
+                    <!-- Fallback nếu ảnh lỗi -->
+                    <div id="errorMsg" style="display: none; width: 280px; height: 280px; background: linear-gradient(135deg, #7B2CBF, #E85D9A); display: flex; align-items: center; justify-content: center; flex-direction: column; clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%);">
+                        <span style="font-size: 4rem;">🎮</span>
+                        <span style="font-size: 1rem; margin-top: 1rem;">Thêm ảnh vào đây</span>
+                    </div>
                 </div>
+                <p class="error-msg" id="textError" style="display: block; margin-top: 1rem;">
+                    ⚠️ Đổi tên ảnh thành <strong>"profile.jpg"</strong> hoặc sửa trong code
+                </p>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <p>Hoặc tải ảnh trực tiếp:</p>
+                <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)">
+                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                    📁 Chọn Ảnh
+                </button>
             </div>
 
             <div class="content">
@@ -725,6 +796,22 @@
             }, 1000);
         });
 
+        // Load Image from File Input
+        function loadImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('profileImg');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('errorMsg').style.display = 'none';
+                    document.getElementById('textError').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         // Tooltip function
         function showTooltip(skill) {
             console.log(`Selected: ${skill}`);
@@ -747,6 +834,12 @@
                 glitch.style.animation = '';
             }, 10);
         }, 5000);
+
+        // Check image load error
+        document.getElementById('profileImg').addEventListener('error', function() {
+            this.style.display = 'none';
+            document.getElementById('errorMsg').style.display = 'flex';
+        });
     </script>
 </body>
 </html>
