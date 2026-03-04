@@ -4,194 +4,187 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minecraft Developer Profile</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* XOÁ VIỀN KHI ẤN TRÊN MOBILE */
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
-            -webkit-user-select: none;
             user-select: none;
         }
 
-        /* XOÁ VIỀN FOCUS CHO TẤT CẢ ELEMENT */
-        *:focus {
+        *:focus, *:active {
             outline: none !important;
-            box-shadow: none !important;
-        }
-
-        *:active {
-            outline: none !important;
-            box-shadow: none !important;
         }
 
         :root {
-            --minecraft-grass: #5D8C47;
-            --minecraft-dirt: #866043;
-            --minecraft-stone: #7D7D7D;
-            --minecraft-diamond: #4AEDD9;
-            --minecraft-gold: #F4D142;
-            --minecraft-red: #B02E26;
-            --minecraft-purple: #7B2CBF;
-            --minecraft-pink: #E85D9A;
-            --dark-bg: #1a0b2e;
+            --diamond: #00f3ff;
+            --purple: #b829dd;
+            --pink: #ff2d95;
+            --gold: #ffd700;
+            --dark: #0a0a0f;
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--dark-bg);
+            background: var(--dark);
             color: #fff;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* Animated Nether Background */
-        .bg-animation {
+        /* Gradient Background */
+        .bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: -2;
             background: 
-                radial-gradient(ellipse at 20% 80%, rgba(123, 44, 191, 0.4) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(232, 93, 154, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 40% 40%, rgba(74, 237, 217, 0.2) 0%, transparent 50%),
-                linear-gradient(180deg, #1a0b2e 0%, #2d1b4e 50%, #1a0b2e 100%);
+                radial-gradient(ellipse at 20% 80%, rgba(184, 41, 221, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255, 45, 149, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 70%),
+                linear-gradient(180deg, #0a0a0f 0%, #1a0a1a 50%, #0a0a0f 100%);
         }
 
-        /* Floating Blocks */
-        .blocks-container {
+        /* Floating Orbs */
+        .orbs {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: -1;
             pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 { width: 400px; height: 400px; background: var(--purple); top: -10%; left: -10%; animation-delay: 0s; }
+        .orb-2 { width: 300px; height: 300px; background: var(--pink); bottom: -5%; right: -5%; animation-delay: -5s; }
+        .orb-3 { width: 200px; height: 200px; background: var(--diamond); top: 40%; left: 60%; animation-delay: -10s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Card - Glassmorphism */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 3rem 2rem;
+            margin-top: 1rem;
+            position: relative;
             overflow: hidden;
         }
 
-        .floating-block {
+        .card::before {
+            content: '';
             position: absolute;
-            width: 40px;
-            height: 40px;
-            opacity: 0.6;
-            animation: floatBlock 20s infinite linear;
-        }
-
-        .block-grass { background: linear-gradient(135deg, #5D8C47 50%, #866043 50%); }
-        .block-diamond { background: linear-gradient(135deg, #4AEDD9 50%, #2E8B7B 50%); box-shadow: 0 0 20px #4AEDD9; }
-        .block-gold { background: linear-gradient(135deg, #F4D142 50%, #B8860B 50%); box-shadow: 0 0 20px #F4D142; }
-        .block-redstone { background: linear-gradient(135deg, #B02E26 50%, #8B0000 50%); box-shadow: 0 0 20px #B02E26; }
-
-        @keyframes floatBlock {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-
-        /* Pixel Particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+            inset: 0;
+            border-radius: 30px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
             pointer-events: none;
         }
 
-        .pixel {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--minecraft-diamond);
-            animation: pixelFloat 10s infinite;
-            box-shadow: 0 0 6px var(--minecraft-diamond);
-        }
-
-        @keyframes pixelFloat {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-100px) translateX(20px); opacity: 0; }
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-            position: relative;
-        }
-
-        /* Profile Card - NO BORDER */
-        .profile-card {
-            background: rgba(26, 11, 46, 0.95);
-            border-radius: 20px;
-            padding: 3rem;
-            margin-top: 2rem;
-            position: relative;
-            box-shadow: 
-                0 20px 60px rgba(0,0,0,0.5),
-                0 0 100px rgba(123, 44, 191, 0.3);
-        }
-
-        /* Profile Image - NO BORDER */
-        .profile-section {
+        /* Profile Image */
+        .profile-wrap {
             text-align: center;
             margin-bottom: 2rem;
         }
 
-        .profile-frame {
-            display: inline-block;
+        .avatar {
             position: relative;
-            border-radius: 20px;
+            display: inline-block;
+            padding: 4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--diamond), var(--purple), var(--pink));
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .avatar-inner {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            position: relative;
+            animation: rotate 4s linear infinite reverse;
         }
 
-        .profile-image {
-            width: 280px;
-            height: 280px;
+        .avatar img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 20px;
             display: block;
-            filter: contrast(1.1) saturate(1.2);
-            transition: transform 0.3s;
-            background: #2d1b4e;
         }
 
-        .profile-frame:hover .profile-image {
-            transform: scale(1.02);
-        }
-
-        /* Crown Badge */
-        .crown-badge {
+        .crown {
             position: absolute;
-            top: -20px;
+            top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 3rem;
-            filter: drop-shadow(0 0 10px var(--minecraft-gold));
-            animation: crownFloat 2s ease-in-out infinite;
+            font-size: 2.5rem;
             z-index: 10;
-            background: rgba(0,0,0,0.5);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            filter: drop-shadow(0 0 20px var(--gold));
+            animation: bounce 2s infinite;
         }
 
-        @keyframes crownFloat {
+        @keyframes bounce {
             0%, 100% { transform: translateX(-50%) translateY(0); }
             50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* Upload */
+        .upload {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, rgba(184, 41, 221, 0.3), rgba(255, 45, 149, 0.3));
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            color: #fff;
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(184, 41, 221, 0.5), rgba(255, 45, 149, 0.5));
+        }
+
+        .upload-btn:active {
+            transform: scale(0.98);
         }
 
         /* Content */
@@ -199,269 +192,200 @@
             text-align: center;
         }
 
-        .rank-badge {
+        .badge {
             display: inline-block;
-            background: linear-gradient(135deg, var(--minecraft-purple), var(--minecraft-pink));
-            color: #fff;
-            padding: 0.5rem 2rem;
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
+            background: linear-gradient(135deg, rgba(184, 41, 221, 0.2), rgba(255, 45, 149, 0.2));
+            padding: 0.4rem 1.5rem;
             border-radius: 50px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
-            animation: badgeGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes badgeGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.3); }
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            color: var(--pink);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
         }
 
         h1 {
             font-family: 'VT323', monospace;
-            font-size: 4rem;
-            color: var(--minecraft-gold);
-            text-shadow: 
-                3px 3px 0px #B8860B,
-                0 0 30px rgba(244, 209, 66, 0.5);
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #fff, var(--diamond));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 0.5rem;
-            letter-spacing: 2px;
+            text-shadow: 0 0 40px rgba(0, 243, 255, 0.3);
         }
 
         .subtitle {
             font-family: 'VT323', monospace;
-            font-size: 1.8rem;
-            color: var(--minecraft-diamond);
-            text-shadow: 0 0 10px rgba(74, 237, 217, 0.5);
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.6);
             margin-bottom: 2rem;
         }
 
-        /* Stats - NO BORDER */
+        /* Stats */
         .stats {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
             margin: 2rem 0;
-            flex-wrap: wrap;
         }
 
-        .stat-box {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 15px;
-            padding: 1.5rem;
-            min-width: 120px;
+        .stat {
+            background: rgba(255,255,255,0.03);
+            padding: 1.5rem 1rem;
+            border-radius: 20px;
             transition: all 0.3s;
         }
 
-        .stat-box:hover {
-            background: rgba(74, 237, 217, 0.1);
+        .stat:hover {
+            background: rgba(255,255,255,0.06);
             transform: translateY(-5px);
         }
 
         .stat-icon {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 0.5rem;
         }
 
         .stat-value {
             font-family: 'VT323', monospace;
-            font-size: 2.5rem;
-            color: var(--minecraft-gold);
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+            font-size: 2rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
 
         .stat-label {
-            font-size: 0.9rem;
-            color: #888;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 0.3rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* Skills - NO BORDER */
-        .skills-section {
+        /* Skills */
+        .skills {
             margin: 2rem 0;
         }
 
         .section-title {
             font-family: 'VT323', monospace;
-            font-size: 2rem;
-            color: var(--minecraft-diamond);
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.5);
             margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(74, 237, 217, 0.5);
         }
 
-        .inventory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-        }
-
-        .inventory-slot {
-            aspect-ratio: 1;
-            background: rgba(139, 139, 139, 0.2);
-            border-radius: 10px;
+        .skill-grid {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-wrap: wrap;
             justify-content: center;
-            cursor: pointer;
+            gap: 0.8rem;
+        }
+
+        .skill {
+            background: rgba(255,255,255,0.05);
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+            cursor: pointer;
         }
 
-        .inventory-slot:hover {
-            background: rgba(74, 237, 217, 0.2);
-            transform: scale(1.1);
+        .skill:hover {
+            background: rgba(0, 243, 255, 0.1);
+            transform: scale(1.05);
         }
 
-        .slot-icon {
-            font-size: 2rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .slot-name {
-            font-size: 0.7rem;
-            color: #fff;
-            font-weight: 600;
-        }
-
-        /* Experience Bar - NO BORDER */
-        .xp-section {
-            margin: 2rem 0;
-        }
-
-        .xp-bar-container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem;
-            border-radius: 15px;
-        }
-
-        .xp-label {
-            font-family: 'VT323', monospace;
+        .skill span:first-child {
             font-size: 1.2rem;
-            color: var(--minecraft-gold);
-            margin-bottom: 0.5rem;
+        }
+
+        .skill span:last-child {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* XP Bar */
+        .xp {
+            margin: 2rem 0;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .xp-header {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.5);
         }
 
         .xp-bar {
-            height: 20px;
-            background: #333;
-            border-radius: 10px;
-            position: relative;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
             overflow: hidden;
         }
 
         .xp-fill {
             height: 100%;
             width: 87%;
-            background: linear-gradient(90deg, var(--minecraft-purple), var(--minecraft-pink));
-            border-radius: 8px;
-            position: relative;
-            animation: xpShine 2s infinite;
+            background: linear-gradient(90deg, var(--purple), var(--pink));
+            border-radius: 4px;
+            box-shadow: 0 0 20px var(--pink);
+            animation: pulse 2s infinite;
         }
 
-        @keyframes xpShine {
-            0% { filter: brightness(1); }
-            50% { filter: brightness(1.3); }
-            100% { filter: brightness(1); }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
-        /* Social Links - NO BORDER */
-        .social-section {
+        /* Social */
+        .social {
             margin-top: 2rem;
         }
 
         .social-grid {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .social-btn {
-            width: 60px;
-            height: 60px;
-            background: rgba(125, 125, 125, 0.3);
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.05);
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
+            font-size: 1.3rem;
             transition: all 0.3s;
             text-decoration: none;
-            color: #fff;
         }
 
         .social-btn:hover {
-            background: rgba(74, 237, 217, 0.3);
-            transform: translateY(-5px);
+            background: rgba(0, 243, 255, 0.2);
+            transform: translateY(-3px) rotate(5deg);
         }
 
-        .social-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Upload Section - NO BORDER */
-        .upload-section {
-            margin: 2rem 0;
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .upload-btn {
-            background: linear-gradient(135deg, var(--minecraft-purple), var(--minecraft-pink));
-            border: none;
-            padding: 1rem 2rem;
-            color: #fff;
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1rem;
-            border-radius: 10px;
-        }
-
-        .upload-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .upload-btn:active {
-            transform: scale(0.95);
-        }
-
-        #fileInput {
-            display: none;
-        }
-
-        /* Achievement Notification */
+        /* Achievement */
         .achievement {
             position: fixed;
             bottom: -100px;
             right: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 15px;
+            background: rgba(10, 10, 15, 0.95);
             padding: 1rem 1.5rem;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             gap: 1rem;
-            transition: bottom 0.5s;
+            transition: all 0.5s;
             z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
         .achievement.show {
@@ -469,193 +393,140 @@
         }
 
         .achievement-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
         }
 
         .achievement-text h4 {
-            color: var(--minecraft-gold);
+            color: var(--gold);
             font-family: 'VT323', monospace;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         .achievement-text p {
-            color: #fff;
-            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
-            .profile-image { width: 200px; height: 200px; }
-            .stats { gap: 1rem; }
-            .stat-box { min-width: 100px; padding: 1rem; }
-            .container { padding: 1rem; }
-            .profile-card { padding: 2rem 1rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .avatar-inner { width: 150px; height: 150px; }
+            .card { padding: 2rem 1rem; }
         }
 
-        /* Glitch Effect */
-        .glitch {
-            position: relative;
+        /* Particles */
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        .glitch::before,
-        .glitch::after {
-            content: attr(data-text);
+        .particle {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            width: 2px;
+            height: 2px;
+            background: var(--diamond);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: particle 15s infinite;
         }
 
-        .glitch::before {
-            left: 2px;
-            text-shadow: -2px 0 var(--minecraft-red);
-            clip: rect(24px, 550px, 90px, 0);
-            animation: glitch-anim 3s infinite linear alternate-reverse;
-        }
-
-        .glitch::after {
-            left: -2px;
-            text-shadow: -2px 0 var(--minecraft-diamond);
-            clip: rect(85px, 550px, 140px, 0);
-            animation: glitch-anim2 2.5s infinite linear alternate-reverse;
-        }
-
-        @keyframes glitch-anim {
-            0% { clip: rect(10px, 9999px, 85px, 0); }
-            20% { clip: rect(63px, 9999px, 130px, 0); }
-            40% { clip: rect(25px, 9999px, 5px, 0); }
-            60% { clip: rect(76px, 9999px, 100px, 0); }
-            80% { clip: rect(15px, 9999px, 170px, 0); }
-            100% { clip: rect(50px, 9999px, 90px, 0); }
-        }
-
-        @keyframes glitch-anim2 {
-            0% { clip: rect(65px, 9999px, 100px, 0); }
-            20% { clip: rect(20px, 9999px, 60px, 0); }
-            40% { clip: rect(90px, 9999px, 140px, 0); }
-            60% { clip: rect(40px, 9999px, 80px, 0); }
-            80% { clip: rect(10px, 9999px, 50px, 0); }
-            100% { clip: rect(70px, 9999px, 120px, 0); }
+        @keyframes particle {
+            0% { transform: translateY(100vh); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100px); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
+    <div class="bg"></div>
     
-    <!-- Floating Blocks -->
-    <div class="blocks-container" id="blocks"></div>
-    
-    <!-- Pixel Particles -->
+    <div class="orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
     <div class="particles" id="particles"></div>
 
     <div class="container">
-        <div class="profile-card">
-            <div class="profile-section">
-                <div class="profile-frame">
-                    <div class="crown-badge">👑</div>
-                    <img src="profile.jpg" 
-                         alt="Minecraft Profile" 
-                         class="profile-image" 
-                         id="profileImg"
-                         onerror="this.style.display='none'; document.getElementById('placeholder').style.display='flex';">
-                    
-                    <div id="placeholder" style="display: none; width: 280px; height: 280px; background: linear-gradient(135deg, #7B2CBF, #E85D9A); align-items: center; justify-content: center; flex-direction: column; border-radius: 20px;">
-                        <span style="font-size: 4rem;">🎮</span>
-                        <span style="font-size: 1rem; margin-top: 1rem;">Thêm ảnh vào đây</span>
+        <div class="card">
+            <div class="profile-wrap">
+                <div class="avatar">
+                    <div class="crown">👑</div>
+                    <div class="avatar-inner">
+                        <img src="profile.jpg" id="profileImg" alt="Profile" onerror="this.style.display='none'; document.getElementById('placeholder').style.display='flex';">
+                        <div id="placeholder" style="display: none; width: 100%; height: 100%; background: linear-gradient(135deg, var(--purple), var(--pink)); align-items: center; justify-content: center; font-size: 3rem;">
+                            🎮
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="upload-section">
-                <p style="margin-bottom: 0.5rem; color: #aaa;">📁 Tải ảnh lên</p>
-                <input type="file" id="fileInput" accept="image/*">
-                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-                    Chọn Ảnh
-                </button>
+            <div class="upload">
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <div class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                    📷 Chọn ảnh
+                </div>
             </div>
 
             <div class="content">
-                <div class="rank-badge">✦ Nether King ✦</div>
-                <h1 class="glitch" data-text="WARPED_KING">WARPED_KING</h1>
-                <p class="subtitle">&lt;Python_Developer /&gt;</p>
+                <div class="badge">✦ PYTHON DEV ✦</div>
+                <h1>WARPED_KING</h1>
+                <p class="subtitle">Full Stack Developer</p>
 
                 <div class="stats">
-                    <div class="stat-box">
+                    <div class="stat">
                         <div class="stat-icon">💎</div>
                         <div class="stat-value">999+</div>
                         <div class="stat-label">Diamonds</div>
                     </div>
-                    <div class="stat-box">
+                    <div class="stat">
                         <div class="stat-icon">⚔️</div>
-                        <div class="stat-value">Lv.99</div>
-                        <div class="stat-label">Combat</div>
+                        <div class="stat-value">99</div>
+                        <div class="stat-label">Level</div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-icon">🏰</div>
+                    <div class="stat">
+                        <div class="stat-icon">🏆</div>
                         <div class="stat-value">50+</div>
                         <div class="stat-label">Projects</div>
                     </div>
-                    <div class="stat-box">
+                    <div class="stat">
                         <div class="stat-icon">☕</div>
                         <div class="stat-value">∞</div>
                         <div class="stat-label">Coffee</div>
                     </div>
                 </div>
 
-                <div class="skills-section">
-                    <h3 class="section-title">[ Inventory ]</h3>
-                    <div class="inventory-grid">
-                        <div class="inventory-slot">
-                            <div class="slot-icon">🐍</div>
-                            <div class="slot-name">Python</div>
-                        </div>
-                        <div class="inventory-slot">
-                            <div class="slot-icon">🎯</div>
-                            <div class="slot-name">Django</div>
-                        </div>
-                        <div class="inventory-slot">
-                            <div class="slot-icon">⚡</div>
-                            <div class="slot-name">FastAPI</div>
-                        </div>
-                        <div class="inventory-slot">
-                            <div class="slot-icon">🐳</div>
-                            <div class="slot-name">Docker</div>
-                        </div>
-                        <div class="inventory-slot">
-                            <div class="slot-icon">☁️</div>
-                            <div class="slot-name">AWS</div>
-                        </div>
-                        <div class="inventory-slot">
-                            <div class="slot-icon">🐘</div>
-                            <div class="slot-name">Postgre</div>
-                        </div>
-                        <div class="inventory-slot">
-                            <div class="slot-icon">🔴</div>
-                            <div class="slot-name">Redis</div>
-                        </div>
-                        <div class="inventory-slot">
-                            <div class="slot-icon">📦</div>
-                            <div class="slot-name">Git</div>
-                        </div>
+                <div class="skills">
+                    <div class="section-title">Tech Stack</div>
+                    <div class="skill-grid">
+                        <div class="skill"><span>🐍</span><span>Python</span></div>
+                        <div class="skill"><span>⚡</span><span>FastAPI</span></div>
+                        <div class="skill"><span>🎯</span><span>Django</span></div>
+                        <div class="skill"><span>🐳</span><span>Docker</span></div>
+                        <div class="skill"><span>☁️</span><span>AWS</span></div>
+                        <div class="skill"><span>🐘</span><span>PostgreSQL</span></div>
+                        <div class="skill"><span>📦</span><span>Git</span></div>
+                        <div class="skill"><span>🔴</span><span>Redis</span></div>
                     </div>
                 </div>
 
-                <div class="xp-section">
-                    <div class="xp-bar-container">
-                        <div class="xp-label">
-                            <span>Experience Level</span>
-                            <span>87%</span>
-                        </div>
-                        <div class="xp-bar">
-                            <div class="xp-fill"></div>
-                        </div>
+                <div class="xp">
+                    <div class="xp-header">
+                        <span>Experience</span>
+                        <span>87%</span>
+                    </div>
+                    <div class="xp-bar">
+                        <div class="xp-fill"></div>
                     </div>
                 </div>
 
-                <div class="social-section">
-                    <h3 class="section-title">[ Connect ]</h3>
+                <div class="social">
+                    <div class="section-title">Connect</div>
                     <div class="social-grid">
                         <a href="#" class="social-btn">🐙</a>
                         <a href="#" class="social-btn">💬</a>
@@ -672,47 +543,29 @@
         <div class="achievement-icon">🏆</div>
         <div class="achievement-text">
             <h4>Achievement Unlocked!</h4>
-            <p>Visited Python Developer's Profile</p>
+            <p>Profile Visited</p>
         </div>
     </div>
 
     <script>
-        // Generate Floating Blocks
-        const blocksContainer = document.getElementById('blocks');
-        const blockTypes = ['block-grass', 'block-diamond', 'block-gold', 'block-redstone'];
-        
-        for (let i = 0; i < 15; i++) {
-            const block = document.createElement('div');
-            block.className = `floating-block ${blockTypes[Math.floor(Math.random() * blockTypes.length)]}`;
-            block.style.left = Math.random() * 100 + '%';
-            block.style.animationDelay = Math.random() * 20 + 's';
-            block.style.animationDuration = (15 + Math.random() * 10) + 's';
-            blocksContainer.appendChild(block);
-        }
-
-        // Generate Pixel Particles
-        const particlesContainer = document.getElementById('particles');
+        // Particles
+        const particles = document.getElementById('particles');
         for (let i = 0; i < 30; i++) {
-            const pixel = document.createElement('div');
-            pixel.className = 'pixel';
-            pixel.style.left = Math.random() * 100 + '%';
-            pixel.style.top = Math.random() * 100 + '%';
-            pixel.style.animationDelay = Math.random() * 10 + 's';
-            pixel.style.animationDuration = (5 + Math.random() * 5) + 's';
-            particlesContainer.appendChild(pixel);
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 15 + 's';
+            p.style.animationDuration = (10 + Math.random() * 10) + 's';
+            particles.appendChild(p);
         }
 
-        // Show Achievement
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('achievement').classList.add('show');
-                setTimeout(() => {
-                    document.getElementById('achievement').classList.remove('show');
-                }, 4000);
-            }, 1000);
-        });
+        // Achievement
+        setTimeout(() => {
+            document.getElementById('achievement').classList.add('show');
+            setTimeout(() => document.getElementById('achievement').classList.remove('show'), 3000);
+        }, 1000);
 
-        // Load Image
+        // Upload
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
